@@ -1,0 +1,28 @@
+---
+- name: Add Gitea repo key
+  shell: curl -s https://packaging.gitlab.io/gitea/gpg.key | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/morph027-gitea.gpg --import
+
+- name: Set key perms
+  shell: sudo chmod 644 /etc/apt/trusted.gpg.d/morph027-gitea.gpg
+
+- name: Add Gitea repo
+  apt_repository:
+    filename: morph027-gitea
+    repo: deb https://packaging.gitlab.io/gitea gitea main
+
+- name: Upgrade Packages
+  apt:
+    update_cache: yes
+    upgrade: full
+
+- name: Install required software
+  package:
+    name:
+      - hugo
+      - gitea
+      - git
+      - nginx
+      - tor
+      - ufw
+      - htop
+      - python3-certbot-nginx

@@ -1,0 +1,43 @@
+- name: Remove default nginx config
+  file:
+    name: /etc/nginx/sites-enabled
+    state: absent
+
+- name: Restore sites-enabled
+  file:
+    name: /etc/nginx/sites-enabled
+    state: directory
+
+- name: Install system nginx config
+  template:
+    src: templates/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
+
+- name: Install nginx config for {{ domain }}
+  template:
+    src: templates/nginx/site.conf
+    dest: /etc/nginx/conf.d/{{ domain }}.conf
+
+- name: Install nginx config for git.{{ domain }}
+  template:
+    src: templates/nginx/gitea.conf
+    dest: /etc/nginx/conf.d/git.{{ domain }}.conf
+
+- name: Install nginx config for our Hidden Service
+  template:
+    src: templates/nginx/tor.conf
+    dest: /etc/nginx/conf.d/tor-{{ domain }}.conf
+
+- name: Reload nginx to activate specified site
+  service:
+    name: nginx
+    state: restarted
+
+- name: Setup certbot
+  shell: "certbot --nginx --non-interactive --agree-tos -m {{ contact_email }} -d {{ domain }} -d git.{{ domain }}"
+
+- name: Reload Nginx
+  systemd:
+    name: nginx
+    enabled: yes
+    state: restarted

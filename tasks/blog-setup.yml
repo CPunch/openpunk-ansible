@@ -1,0 +1,11 @@
+- name: Clone blog repository
+  git:
+    repo: "https://github.com/CPunch/openpunk.git"
+    dest: "/var/www/{{ domain }}"
+
+- name: Build blog
+  command:
+    cmd: hugo
+    chdir: "/var/www/{{ domain }}"
+
+# TODO: missing cron job for regenerating the static blog every hour

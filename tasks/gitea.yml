@@ -1,0 +1,12 @@
+- name: Configure Gitea
+  become: yes
+  become_user: gitea
+  template:
+    src: templates/gitea/app.ini
+    dest: /etc/gitea/app.ini
+
+- name: Reload Gitea
+  systemd:
+    name: gitea
+    enabled: yes
+    state: restarted

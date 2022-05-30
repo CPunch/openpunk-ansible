@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: yes
+  vars_files:
+    - group_vars/all.yml
+
+  vars_prompt:
+    - name: domain
+      prompt: domain pointing to the vps
+      private: no
+
+  tasks:
+    - import_tasks: tasks/essential.yml
+    - import_tasks: tasks/firewall.yml
+    - import_tasks: tasks/blog-setup.yml
+    - import_tasks: tasks/gitea.yml
+    - import_tasks: tasks/tor.yml
+    - import_tasks: tasks/nginx.yml

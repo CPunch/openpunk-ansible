@@ -1,0 +1,29 @@
+- name: Install torrc
+  template:
+    src: templates/tor/torrc
+    dest: /etc/tor/torrc
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: Create Tor HS directory
+  file:
+    path: /var/lib/tor/{{ domain }}
+    state: directory
+    owner: debian-tor
+    group: debian-tor
+    mode: u=rwx,g=,o=
+
+- name: Set Tor HS keys
+  copy:
+    src: secrets/hs_ed25519_secret_key
+    dest: /var/lib/tor/{{ domain }}/hs_ed25519_secret_key
+    owner: debian-tor
+    group: debian-tor
+    mode: u=rw,g=,o=
+
+- name: Reload Tor
+  systemd:
+    name: tor
+    enabled: yes
+    state: restarted
