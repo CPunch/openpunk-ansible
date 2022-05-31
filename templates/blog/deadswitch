@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # This is meant to be run by cron, just setup a cronjob to run this script every day or so
 # This script checks if a file ($fileSwitch) is last modified > $dayLimit days ago & if so a script is run
 # On your computer or laptop, setup a cronjob to run an ssh command to modify $fileSwitch every couple hours or so.

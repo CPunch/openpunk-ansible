@@ -1,3 +1,4 @@
+---
 - name: Install torrc
   template:
     src: templates/tor/torrc

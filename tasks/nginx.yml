@@ -1,3 +1,4 @@
+---
 - name: Remove default nginx config
   file:
     name: /etc/nginx/sites-enabled

@@ -1,0 +1,26 @@
+---
+- name: Setup git config
+  copy:
+    src: templates/.gitconfig
+    dest: /root/.gitconfig
+    owner: root
+    mode: u=rw,g=,o=
+
+- name: Scan for SSH host keys.
+  local_action:
+    module: shell
+    cmd: ssh-keyscan git.{{ domain }} 2>/dev/null
+  changed_when: False
+  register: ssh_scan
+
+- name: Update known_hosts.
+  local_action:
+    module: known_hosts
+    key: "{{ item }}"
+    name: git.{{ domain }}
+  with_items: "{{ ssh_scan.stdout_lines }}"
+
+- name: Install ssh keys
+  clone:
+    src: secrets/id_ed25519
+    dest: /root/.ssh/id_ed25519

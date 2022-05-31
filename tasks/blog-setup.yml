@@ -1,14 +1,8 @@
+---
 - name: Clone blog repository
   git:
     repo: "https://github.com/CPunch/openpunk.git"
     dest: "/var/www/{{ domain }}"
-
-- name: Setup git config
-  copy:
-    src: templates/.gitconfig
-    dest: /root/.gitconfig
-    owner: root
-    mode: u=rw,g=,o=
 
 - name: Build blog
   command:

@@ -32,7 +32,12 @@
   shell: chsh -s /usr/bin/zsh
 
 - name: Clone Powerlevel10k theme
-  shell: git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k
+  git:
+    repo: "https://github.com/romkatv/powerlevel10k.git"
+    dest: "/root/powerlevel10k"
+    depth: 1
 
-- name: Install Powerlevel10k theme
-  shell: echo 'source /root/powerlevel10k/powerlevel10k.zsh-theme' > /root/.zshrc
+- name: Install .zshrc
+  copy:
+    src: templates/.zshrc
+    dest: /root/.zshrc

@@ -1,0 +1,34 @@
+---
+- name: Create deadman directory
+  file:
+    name: /root/deadman
+    state: directory
+
+- name: Install deadswitch script
+  copy:
+    src: templates/blog/deadswitch
+    dest: /usr/local/bin/deadswitch
+    mode: u+rwx
+
+- name: Install imdead.sh
+  copy:
+    src: templates/blog/imdead.sh
+    dest: /root/deadman/imdead.sh
+    mode: u+rwx
+
+- name: Copy dead message
+  template:
+    src: secrets/dead.md
+    dest: /root/deadman/dead.md
+
+- name: Install deadlock, disabling the deadswitch
+  file:
+    name: /root/.deadlock
+    state: touch
+
+- name: Install deadlock cronjob
+  cron:
+    name: Run deadswitch
+    minute: 0
+    hour: 1
+    job: /usr/local/bin/deadswitch

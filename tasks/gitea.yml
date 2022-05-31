@@ -1,3 +1,4 @@
+---
 - name: Configure Gitea
   template:
     src: templates/gitea/app.ini
