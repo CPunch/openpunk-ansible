@@ -25,4 +25,14 @@
       - tor
       - ufw
       - htop
+      - zsh # :D
       - python3-certbot-nginx
+
+- name: Setup default shell (zsh)
+  shell: chsh -s /usr/bin/zsh
+
+- name: Clone Powerlevel10k theme
+  shell: git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k
+
+- name: Install Powerlevel10k theme
+  shell: echo 'source /root/powerlevel10k/powerlevel10k.zsh-theme' > /root/.zshrc

@@ -1,0 +1,7 @@
+[user]
+        email = openpunk@proton.me
+        name = OpenPunk
+[core]
+        editor = nano
+[pull]
+        rebase = true

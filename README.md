@@ -1,4 +1,4 @@
-# Openpunk's ansible recovery
+# OpenPunk's ansible recovery
 
 This is my failsafe (and also my helpful migration tool) for restoring the OpenPunk server. This handles setting everything back up, including:
 

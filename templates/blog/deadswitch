@@ -1,0 +1,26 @@
+#! /bin/bash
+# This is meant to be run by cron, just setup a cronjob to run this script every day or so
+# This script checks if a file ($fileSwitch) is last modified > $dayLimit days ago & if so a script is run
+# On your computer or laptop, setup a cronjob to run an ssh command to modify $fileSwitch every couple hours or so.
+
+fileTrigger="$HOME/.deadtrigger"
+fileLock="$HOME/.deadlock" # if this file exists, the deadmans switch will be disabled. This file is automatically created when the switch is pulled
+scriptToRun="$HOME/deadman/imdead.sh"
+dayLimit=14 # 14 day trigger
+
+# if our file lock exists, we already ran OR the switch has been disabled on purpose
+if [ -f "$fileLock" ]; then
+    exit 0
+fi
+
+# time has to be in seconds so dayLimit (days) * 24 (hours in a day) * 60 (mins in an hour) * 60 (seconds in a min)
+let "triggerTime=$dayLimit * 24 * 60 * 60"
+let "lastPing=$(stat -c %Y $fileTrigger)"
+let "currTime=$(date +%s)"
+let "dTime=$currTime-$lastPing"
+echo $dTime
+if [ $dTime -gt $triggerTime ]
+then 
+    touch $fileLock
+    bash $scriptToRun
+fi

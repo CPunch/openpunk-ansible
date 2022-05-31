@@ -1,0 +1,5 @@
+#!/bin/bash
+cd /var/www/{{ domain }}
+/usr/bin/git fetch origin
+/usr/bin/git reset --hard origin/main
+/usr/bin/hugo

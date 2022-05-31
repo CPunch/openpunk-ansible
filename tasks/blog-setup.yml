@@ -3,9 +3,26 @@
     repo: "https://github.com/CPunch/openpunk.git"
     dest: "/var/www/{{ domain }}"
 
+- name: Setup git config
+  copy:
+    src: templates/.gitconfig
+    dest: /root/.gitconfig
+    owner: root
+    mode: u=rw,g=,o=
+
 - name: Build blog
   command:
     cmd: hugo
     chdir: "/var/www/{{ domain }}"
 
-# TODO: missing cron job for regenerating the static blog every hour
+- name: Install updateBlog script
+  template:
+    src: templates/blog/updateBlog
+    dest: /usr/local/bin/updateBlog
+    mode: u+rwx
+
+- name: Setup blog cron job
+  cron:
+    name: Build blog every hour
+    minute: 0
+    job: /usr/local/bin/updateBlog
