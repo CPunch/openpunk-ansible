@@ -15,5 +15,6 @@
     - import_tasks: tasks/blog-setup.yml
     - import_tasks: tasks/gitea.yml
     - import_tasks: tasks/tor.yml
-    - import_tasks: tasks/deadswitch.yml
     - import_tasks: tasks/nginx.yml
+    - import_tasks: tasks/git.yml
+    - import_tasks: tasks/deadswitch.yml

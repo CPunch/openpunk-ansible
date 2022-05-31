@@ -24,3 +24,8 @@
   clone:
     src: secrets/id_ed25519
     dest: /root/.ssh/id_ed25519
+
+- name: Install ssh keys
+  clone:
+    src: secrets/id_ed25519.pub
+    dest: /root/.ssh/id_ed25519.pub
