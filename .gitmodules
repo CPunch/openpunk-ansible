@@ -1,0 +1,3 @@
+[submodule "secrets"]
+	path = secrets
+	url = git@github.com:CPunch/openpunk-secrets.git
