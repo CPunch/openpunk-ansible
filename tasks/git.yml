@@ -16,6 +16,7 @@
     dest: /root/.ssh/known_hosts
     owner: root
     mode: u=rw,g=,o=
+    force: no # if we already have a known_hosts file, ignore!
 
 - name: Install ssh priv key
   copy:

@@ -21,9 +21,9 @@
     src: secrets/dead.md
     dest: /root/deadman/dead.md
 
-- name: Install deadlock, disabling the deadswitch
+- name: Install deadtrigger
   file:
-    name: /root/.deadlock
+    name: /root/.deadtrigger
     state: touch
 
 - name: Install deadlock cronjob

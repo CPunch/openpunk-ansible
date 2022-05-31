@@ -4,11 +4,7 @@
     src: templates/gitea/app.ini
     dest: /etc/gitea/app.ini
     owner: gitea
-
-- name: Setup Gitea database
-  become: yes
-  become_user: gitea
-  shell: gitea migrate -c /etc/gitea/app.ini
+    force: no # we don't want to kill our existing config D:
 
 - name: Reload Gitea
   systemd:

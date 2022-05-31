@@ -14,26 +14,34 @@
     src: templates/nginx/nginx.conf
     dest: /etc/nginx/nginx.conf
 
+# setup our configs for each host (we don't want to 
+# overwrite certbot's changes, so if it already exists,
+# don't copy!)
+
 - name: Install nginx config for {{ domain }}
   template:
     src: templates/nginx/site.conf
     dest: /etc/nginx/conf.d/{{ domain }}.conf
+    force: no
 
 - name: Install nginx config for git.{{ domain }}
   template:
     src: templates/nginx/gitea.conf
     dest: /etc/nginx/conf.d/git.{{ domain }}.conf
+    force: no
 
 - name: Install nginx config for our Hidden Service
   template:
     src: templates/nginx/tor.conf
     dest: /etc/nginx/conf.d/tor-{{ domain }}.conf
+    force: no
 
 - name: Reload nginx to activate specified site
   service:
     name: nginx
     state: restarted
 
+# certbot is a life saver. thank you certbot devs!
 - name: Setup certbot
   shell: "certbot --nginx --non-interactive --agree-tos -m {{ contact_email }} -d {{ domain }} -d git.{{ domain }}"
 

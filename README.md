@@ -9,9 +9,11 @@ This is my failsafe (and also my helpful migration tool) for restoring the OpenP
 - my shell theme (zsh + powerlevel10k)
 - deadswitch (& the ssh + git config to allow pushes)
 
+This playbook assumes the target VPS is running the latest debian stable release.
+
 ## Notes to my future self
 
-The deadswitch is disabled by default. Delete the file lock at `/root/.deadlock` to enable it.
+The deadswitch has the deadtrigger setup every run, so you have a 14-day timer to add a one-liner to your crontab to keep that deadtrigger set.
 
 ## Usage
 
