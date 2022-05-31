@@ -6,26 +6,24 @@
     owner: root
     mode: u=rw,g=,o=
 
-- name: Scan for SSH host keys.
-  local_action:
-    module: shell
-    cmd: ssh-keyscan git.{{ domain }} 2>/dev/null
-  changed_when: False
+- name: Scan for SSH host keys
+  command: ssh-keyscan github.com 2>/dev/null
   register: ssh_scan
 
-- name: Update known_hosts.
-  local_action:
-    module: known_hosts
-    key: "{{ item }}"
-    name: git.{{ domain }}
-  with_items: "{{ ssh_scan.stdout_lines }}"
+- name: Update known_hosts
+  copy:
+    content: "{{ ssh_scan.stdout_lines|join('\n')  }}"
+    dest: /root/.ssh/known_hosts
+    owner: root
+    mode: u=rw,g=,o=
 
-- name: Install ssh keys
-  clone:
+- name: Install ssh priv key
+  copy:
     src: secrets/id_ed25519
     dest: /root/.ssh/id_ed25519
+    mode: u=rw,g=,o=
 
-- name: Install ssh keys
-  clone:
+- name: Install ssh pub key
+  copy:
     src: secrets/id_ed25519.pub
     dest: /root/.ssh/id_ed25519.pub
