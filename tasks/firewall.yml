@@ -16,3 +16,18 @@
     rule: allow
     port: '443'
     proto: tcp
+
+- name: Startup UFW
+  community.general.ufw:
+    state: enabled
+
+- name: Copy fail2ban jail config
+  copy:
+    src: templates/fail2ban/jails.local
+    dest: /etc/fail2ban/jail.d/jails.local
+
+- name: Enable fail2ban service
+  systemd:
+    name: fail2ban
+    enabled: yes
+    state: restarted
