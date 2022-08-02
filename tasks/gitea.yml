@@ -10,4 +10,4 @@
   systemd:
     name: gitea
     enabled: yes
-    state: restarted
+    state: started

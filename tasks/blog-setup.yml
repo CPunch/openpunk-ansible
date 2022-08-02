@@ -15,6 +15,7 @@
     dest: /usr/local/bin/updateBlog
     mode: u+rwx
 
+# Rebuild blog every hour
 - name: Setup blog cron job
   cron:
     name: Build blog every hour

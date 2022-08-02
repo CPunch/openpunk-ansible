@@ -36,7 +36,7 @@
     dest: /etc/nginx/conf.d/tor-{{ domain }}.conf
     force: no
 
-- name: Reload nginx to activate specified site
+- name: Reload Nginx to install LetsEncrypt
   service:
     name: nginx
     state: restarted
@@ -45,7 +45,7 @@
 - name: Setup certbot
   shell: "certbot --nginx --non-interactive --agree-tos -m {{ contact_email }} -d {{ domain }} -d git.{{ domain }}"
 
-- name: Reload Nginx
+- name: Reload Nginx with LetsEncrypt installed
   systemd:
     name: nginx
     enabled: yes

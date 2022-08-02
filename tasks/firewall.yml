@@ -30,4 +30,4 @@
   systemd:
     name: fail2ban
     enabled: yes
-    state: restarted
+    state: started

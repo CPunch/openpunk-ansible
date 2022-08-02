@@ -25,6 +25,7 @@
       - tor
       - ufw
       - fail2ban
+      - goaccess
       - htop
       - zsh # :D
       - python3-certbot-nginx

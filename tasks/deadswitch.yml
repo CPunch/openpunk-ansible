@@ -26,6 +26,7 @@
     name: /root/.deadtrigger
     state: touch
 
+# Run deadswitch daily at 1am
 - name: Install deadlock cronjob
   cron:
     name: Run deadswitch
