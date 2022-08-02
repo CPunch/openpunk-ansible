@@ -10,8 +10,8 @@
     state: directory
 
 - name: Install system nginx config
-  template:
-    src: templates/nginx/nginx.conf
+  copy:
+    src: static/nginx/nginx.conf
     dest: /etc/nginx/nginx.conf
 
 # setup our configs for each host (we don't want to 

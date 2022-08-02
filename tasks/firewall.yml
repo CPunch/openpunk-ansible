@@ -23,7 +23,7 @@
 
 - name: Copy fail2ban jail config
   copy:
-    src: templates/fail2ban/jails.local
+    src: static/fail2ban/jails.local
     dest: /etc/fail2ban/jail.d/jails.local
 
 - name: Enable fail2ban service

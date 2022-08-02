@@ -1,5 +1,5 @@
 ---
 - name: Copy goaccess config
-  template:
-    src: templates/goaccess/goaccess.conf
+  copy:
+    src: static/goaccess/goaccess.conf
     dest: /etc/goaccess/goaccess.conf

@@ -41,6 +41,6 @@
 
 - name: Install .zshrc
   copy:
-    src: templates/.zshrc
+    src: static/.zshrc
     dest: /root/.zshrc
     force: no

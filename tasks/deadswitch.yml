@@ -6,20 +6,21 @@
 
 - name: Install deadswitch script
   copy:
-    src: templates/blog/deadswitch
+    src: static/blog/deadswitch
     dest: /usr/local/bin/deadswitch
     mode: u+rwx
 
 - name: Install imdead.sh
   copy:
-    src: templates/blog/imdead.sh
+    src: static/blog/imdead.sh
     dest: /root/deadman/imdead.sh
     mode: u+rwx
 
 - name: Copy dead patch
-  template:
+  copy:
     src: secrets/dead.patch
     dest: /root/deadman/dead.patch
+    mode: u+rwx
 
 - name: Install deadtrigger
   file:

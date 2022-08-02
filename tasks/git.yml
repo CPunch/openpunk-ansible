@@ -1,7 +1,7 @@
 ---
 - name: Setup git config
   copy:
-    src: templates/.gitconfig
+    src: static/.gitconfig
     dest: /root/.gitconfig
     owner: root
     mode: u=rw,g=,o=
