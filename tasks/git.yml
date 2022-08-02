@@ -6,6 +6,9 @@
     owner: root
     mode: u=rw,g=,o=
 
+# make sure our vps trusts the github.com key signature. we pipe the output
+# of ssh-keyscan into .ssh/known_hosts
+
 - name: Scan for SSH host keys
   command: ssh-keyscan github.com 2>/dev/null
   register: ssh_scan
@@ -17,6 +20,9 @@
     owner: root
     mode: u=rw,g=,o=
     force: no # if we already have a known_hosts file, ignore!
+
+# this keypair is trusted under my github account, so it allows my vps to make pushes
+# to the main branch of my openpunk repository. (for my deadswitch: see static/blog/imdead.sh)
 
 - name: Install ssh priv key
   copy:
