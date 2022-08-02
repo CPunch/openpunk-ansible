@@ -16,10 +16,10 @@
     dest: /root/deadman/imdead.sh
     mode: u+rwx
 
-- name: Copy dead message
+- name: Copy dead patch
   template:
-    src: secrets/dead.md
-    dest: /root/deadman/dead.md
+    src: secrets/dead.patch
+    dest: /root/deadman/dead.patch
 
 - name: Install deadtrigger
   file:

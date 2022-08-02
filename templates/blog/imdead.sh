@@ -2,12 +2,12 @@
 
 cd $HOME/deadman
 
-postTemplate='dead.md'
+postPatch='dead.patch'
 pageName='openpunk/content/pages/dead.md'
 currDate=$(date '+%Y-%m-%d')
 
 git clone git@github.com:CPunch/openpunk.git
-cp $postTemplate $pageName
+git am postPatch
 
 # replace our --DATE-- with the current date
 sed -i 's/--DATE--/'$currDate'/g' $pageName
