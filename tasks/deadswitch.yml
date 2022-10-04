@@ -8,19 +8,19 @@
   copy:
     src: static/blog/deadswitch
     dest: /usr/local/bin/deadswitch
-    mode: u+rwx
+    mode: u+rx
 
 - name: Install imdead.sh
   copy:
     src: static/blog/imdead.sh
     dest: /root/deadman/imdead.sh
-    mode: u+rwx
+    mode: u+rx
 
 - name: Copy dead patch
   copy:
     src: secrets/dead.patch
     dest: /root/deadman/dead.patch
-    mode: u+rwx
+    mode: u+rw
 
 - name: Install deadtrigger
   file:

@@ -13,7 +13,7 @@
   template:
     src: templates/blog/updateBlog
     dest: /usr/local/bin/updateBlog
-    mode: u+rwx
+    mode: u+rx
 
 # Rebuild blog every hour
 - name: Setup blog cron job
