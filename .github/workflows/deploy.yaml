@@ -1,0 +1,27 @@
+name: Run Playbook
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          submodules: recursive
+      - name: Run Ansible-Playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: run.yml
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          inventory: |
+            [hosts]
+            openpunk-vps ansible_host=96.30.199.68 ansible_user=root ansible_connection=ssh
+          vault_password: ${{ secrets.VAULT_PASSWORD }}
+          options: |
+            --extra-vars domain=openpunk.com
