@@ -2,7 +2,7 @@
 
 cd $HOME/deadman
 
-postPatch='../dead.patch'
+postPatch='dead.patch'
 pageName='content/pages/dead.md'
 currDate=$(date '+%Y-%m-%d')
 
