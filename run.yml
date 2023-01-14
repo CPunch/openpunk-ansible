@@ -9,13 +9,13 @@
       prompt: domain pointing to the vps
       private: no
 
-  tasks:
-    - import_tasks: tasks/essential.yml
-    - import_tasks: tasks/firewall.yml
-    - import_tasks: tasks/blog.yml
-    - import_tasks: tasks/gitea.yml
-    - import_tasks: tasks/tor.yml
-    - import_tasks: tasks/nginx.yml
-    - import_tasks: tasks/git.yml
-    - import_tasks: tasks/goaccess.yml
-    - import_tasks: tasks/deadswitch.yml
+  roles:
+    - essential
+    - git
+    - deadswitch
+    - firewall
+    - blog
+    - gitea
+    - nginx
+    - goaccess
+    - tor

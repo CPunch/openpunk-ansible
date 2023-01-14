@@ -1,5 +1,5 @@
 ---
 - name: Copy goaccess config
   copy:
-    src: static/goaccess/goaccess.conf
+    src: goaccess.conf
     dest: /etc/goaccess/goaccess.conf

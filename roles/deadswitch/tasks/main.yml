@@ -6,13 +6,13 @@
 
 - name: Install deadswitch script
   copy:
-    src: static/blog/deadswitch
+    src: deadswitch
     dest: /usr/local/bin/deadswitch
     mode: u+rx
 
 - name: Install imdead.sh
   copy:
-    src: static/blog/imdead.sh
+    src: imdead.sh
     dest: /root/deadman/imdead.sh
     mode: u+rx
 
@@ -22,6 +22,7 @@
     dest: /root/deadman/dead.patch
     mode: u+rw
 
+# TODO: make idempotent
 - name: Install deadtrigger
   file:
     name: /root/.deadtrigger

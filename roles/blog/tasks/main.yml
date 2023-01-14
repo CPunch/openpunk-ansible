@@ -4,6 +4,7 @@
     repo: "https://github.com/CPunch/openpunk.git"
     dest: "/var/www/{{ domain }}"
 
+# TODO: make idempotent
 - name: Build blog
   command:
     cmd: hugo
@@ -11,7 +12,7 @@
 
 - name: Install updateBlog script
   template:
-    src: templates/blog/updateBlog
+    src: templates/updateBlog
     dest: /usr/local/bin/updateBlog
     mode: u+rx
 

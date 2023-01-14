@@ -1,7 +1,7 @@
 ---
 - name: Configure Gitea
   template:
-    src: templates/gitea/app.ini
+    src: app.ini
     dest: /etc/gitea/app.ini
     owner: gitea
     force: no # we don't want to kill our existing config D:

@@ -1,7 +1,7 @@
 ---
 - name: Install torrc
   template:
-    src: templates/tor/torrc
+    src: torrc
     dest: /etc/tor/torrc
     owner: root
     group: root
@@ -23,7 +23,7 @@
     group: debian-tor
     mode: u=rw,g=,o=
 
-- name: Reload Tor
+- name: Enable Tor Service
   systemd:
     name: tor
     enabled: yes

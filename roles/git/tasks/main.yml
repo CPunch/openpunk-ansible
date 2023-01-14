@@ -1,7 +1,7 @@
 ---
 - name: Setup git config
   copy:
-    src: static/.gitconfig
+    src: .gitconfig
     dest: /root/.gitconfig
     owner: root
     mode: u=rw,g=,o=
@@ -9,6 +9,7 @@
 # make sure our vps trusts the github.com key signature. we pipe the output
 # of ssh-keyscan into .ssh/known_hosts
 
+# TODO: make idempotent
 - name: Scan for SSH host keys
   command: ssh-keyscan github.com 2>/dev/null
   register: ssh_scan

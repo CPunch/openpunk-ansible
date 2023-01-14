@@ -1,9 +1,12 @@
 ---
+
+# TODO: make idempotent
 - name: Remove default nginx config
   file:
     name: /etc/nginx/sites-enabled
     state: absent
 
+# TODO: make idempotent
 - name: Restore sites-enabled
   file:
     name: /etc/nginx/sites-enabled
@@ -11,7 +14,7 @@
 
 - name: Install system nginx config
   copy:
-    src: static/nginx/nginx.conf
+    src: nginx.conf
     dest: /etc/nginx/nginx.conf
 
 # setup our configs for each host (we don't want to 
@@ -20,19 +23,19 @@
 
 - name: Install nginx config for {{ domain }}
   template:
-    src: templates/nginx/site.conf
+    src: templates/site.conf
     dest: /etc/nginx/conf.d/{{ domain }}.conf
     force: no
 
 - name: Install nginx config for git.{{ domain }}
   template:
-    src: templates/nginx/gitea.conf
+    src: templates/gitea.conf
     dest: /etc/nginx/conf.d/git.{{ domain }}.conf
     force: no
 
 - name: Install nginx config for our Hidden Service
   template:
-    src: templates/nginx/tor.conf
+    src: templates/tor.conf
     dest: /etc/nginx/conf.d/tor-{{ domain }}.conf
     force: no
 
