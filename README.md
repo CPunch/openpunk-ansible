@@ -16,6 +16,9 @@ This playbook assumes the target VPS is running the latest debian stable release
 ## Notes to my future self
 The deadswitch has the deadtrigger setup every run, so you have a 14-day timer to add a one-liner to your crontab to keep that deadtrigger set.
 
+Some DNS records also need to be set:
+- an A record with a `git.*` subdomain
+
 ## Usage
 ```sh
 ansible-playbook -i hosts --ask-vault-pass run.yml
