@@ -1,0 +1,4 @@
+---
+- name: setup-nginx
+  include_tasks: setup.yml
+  listen: "setup nginx"

@@ -1,21 +1,9 @@
 ---
-
-# TODO: make idempotent
-- name: Remove default nginx config
-  file:
-    name: /etc/nginx/sites-enabled
-    state: absent
-
-# TODO: make idempotent
-- name: Restore sites-enabled
-  file:
-    name: /etc/nginx/sites-enabled
-    state: directory
-
 - name: Install system nginx config
   copy:
     src: nginx.conf
     dest: /etc/nginx/nginx.conf
+  notify: setup nginx
 
 # setup our configs for each host (we don't want to 
 # overwrite certbot's changes, so if it already exists,
@@ -26,30 +14,24 @@
     src: templates/site.conf
     dest: /etc/nginx/conf.d/{{ domain }}.conf
     force: no
+  notify: setup nginx
 
 - name: Install nginx config for git.{{ domain }}
   template:
     src: templates/gitea.conf
     dest: /etc/nginx/conf.d/git.{{ domain }}.conf
     force: no
+  notify: setup nginx
 
 - name: Install nginx config for our Hidden Service
   template:
     src: templates/tor.conf
     dest: /etc/nginx/conf.d/tor-{{ domain }}.conf
     force: no
+  notify: setup nginx
 
-- name: Reload Nginx to install LetsEncrypt
-  service:
-    name: nginx
-    state: restarted
-
-# certbot is a life saver. thank you certbot devs!
-- name: Setup certbot
-  shell: "certbot --nginx --non-interactive --agree-tos -m {{ contact_email }} -d {{ domain }} -d git.{{ domain }}"
-
-- name: Reload Nginx with LetsEncrypt installed
+- name: Enable Nginx
   systemd:
     name: nginx
     enabled: yes
-    state: restarted
+    state: started
