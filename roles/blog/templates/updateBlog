@@ -2,4 +2,7 @@
 cd /var/www/{{ domain }}
 /usr/bin/git fetch origin
 /usr/bin/git reset --hard origin/main
-/usr/bin/hugo
+
+# build sites
+/usr/bin/hugo --cleanDestinationDir --minify -d public -b https://{{ domain }}
+/usr/bin/hugo --cleanDestinationDir --minify -d tor -b {{ onionDomain }}

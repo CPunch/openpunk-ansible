@@ -27,8 +27,6 @@
   template:
     src: templates/tor.conf
     dest: /etc/nginx/conf.d/tor-{{ domain }}.conf
-    force: no
-  notify: setup nginx
 
 - name: Enable Nginx
   systemd:

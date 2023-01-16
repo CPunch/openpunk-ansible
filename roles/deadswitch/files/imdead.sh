@@ -16,3 +16,5 @@ sed -i 's/--DATE--/'$currDate'/g' $pageName
 git add .
 git commit -m "DeadSwitch: No response from CPunch in 14 days, posting dead.md"
 git push --force
+
+updateBlog
