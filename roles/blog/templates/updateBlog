@@ -1,8 +1,30 @@
 #!/bin/bash
 cd /var/www/{{ domain }}
-/usr/bin/git fetch origin
-/usr/bin/git reset --hard origin/main
 
-# build sites
-/usr/bin/hugo --cleanDestinationDir --minify -d public -b https://{{ domain }}
-/usr/bin/hugo --cleanDestinationDir --minify -d tor -b {{ onionDomain }}
+PUBLIC_DIR=public
+TOR_DIR=tor
+
+buildBlog () {
+    hugo --cleanDestinationDir --minify -d $PUBLIC_DIR -b https://{{ domain }}
+    hugo --cleanDestinationDir --minify -d $TOR_DIR -b {{ onionDomain }}
+}
+
+git fetch origin
+UPSTREAM=${1:-'@{u}'}
+LOCAL=$(git rev-parse @)
+REMOTE=$(git rev-parse "$UPSTREAM")
+BASE=$(git merge-base @ "$UPSTREAM")
+if [ $LOCAL = $REMOTE ]; then
+    echo "blog is up to date!"
+elif [ $LOCAL = $BASE ]; then
+    # there are changes to reset too
+    # && we need to update our blog
+    echo "missing changes!!"
+    git reset --hard origin/main
+    buildBlog
+fi
+
+if [ ! -d "$PUBLIC_DIR" ] || [ ! -d "$TOR_DIR" ]; then
+    echo "missing directories..."
+    buildBlog
+fi
