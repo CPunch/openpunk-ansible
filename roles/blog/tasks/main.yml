@@ -4,17 +4,17 @@
     repo: "https://github.com/CPunch/openpunk.git"
     dest: "/var/www/{{ domain }}"
 
-# TODO: make idempotent (call the updateBlog script !!)
-- name: Build blog
-  command:
-    cmd: hugo
-    chdir: "/var/www/{{ domain }}"
-
 - name: Install updateBlog script
   template:
     src: templates/updateBlog
     dest: /usr/local/bin/updateBlog
     mode: u+rx
+
+- name: Build blog
+  command:
+    cmd: updateBlog
+  register: blog_out
+  changed_when: blog_out.stdout != "up to date"
 
 # Rebuild blog every hour
 - name: Setup blog cron job
