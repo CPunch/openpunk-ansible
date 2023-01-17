@@ -15,14 +15,18 @@ LOCAL=$(git rev-parse @)
 REMOTE=$(git rev-parse "$UPSTREAM")
 BASE=$(git merge-base @ "$UPSTREAM")
 if [ $LOCAL = $REMOTE ]; then
+    # this string is hardcoded && checked by the 'Build blog' task
+    # to check for changes (changed_when)
     echo "up to date"
 elif [ $LOCAL = $BASE ]; then
-    # there are changes to reset too
-    # && we need to update our blog
-    echo "missing changes!!"
+    # there are changes to reset too so we need to rebuild
+    echo "missing changes !!"
     git reset --hard origin/main
     buildBlog
-elif [ ! -d "$PUBLIC_DIR" ] || [ ! -d "$TOR_DIR" ]; then
-    echo "missing directories..."
+fi
+
+if [ ! -d "$PUBLIC_DIR" ] || [ ! -d "$TOR_DIR" ]; then
+    # probably first time setup
+    echo "missing directories !!"
     buildBlog
 fi
