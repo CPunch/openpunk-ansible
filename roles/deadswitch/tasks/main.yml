@@ -22,11 +22,17 @@
     dest: /root/deadman/dead.patch
     mode: u+rw
 
-# TODO: make idempotent
+# TODO: deadtrigger path should be a variable, no?
+- name: Check deadtrigger
+  stat:
+    path: /root/.deadtrigger
+  register: deadstat
+
 - name: Install deadtrigger
   file:
-    name: /root/.deadtrigger
+    path: /root/.deadtrigger
     state: touch
+  when: deadstat.stat.exists == false
 
 # Run deadswitch daily at 1am
 - name: Install deadlock cronjob
