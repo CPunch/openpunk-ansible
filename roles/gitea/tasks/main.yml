@@ -1,4 +1,25 @@
 ---
+- name: Check for Gitea gpg key
+  stat:
+    path: /etc/apt/trusted.gpg.d/morph027-gitea.gpg
+  register: gitea_key
+
+- name: Add Gitea key && repository
+  block:
+    - name: Import Gitea key
+      shell: curl -s https://packaging.gitlab.io/gitea/gpg.key | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/morph027-gitea.gpg --import && sudo chmod 644 /etc/apt/trusted.gpg.d/morph027-gitea.gpg
+
+    - name: Add Gitea repository
+      apt_repository:
+        filename: morph027-gitea
+        repo: deb https://packaging.gitlab.io/gitea gitea main
+  when: gitea_key.stat.exists == false or gitea_key.stat.mode != "0644"
+
+- name: Install Gitea
+  package:
+    name:
+      - gitea
+
 - name: Configure Gitea
   template:
     src: app.ini
