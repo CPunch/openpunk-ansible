@@ -1,7 +1,7 @@
 ---
 - name: Install torrc
   template:
-    src: torrc
+    src: templates/torrc
     dest: /etc/tor/torrc
     owner: root
     group: root

@@ -18,9 +18,10 @@
       - zsh # :D
       - python3-certbot-nginx
 
-# TODO: make idempotent
-- name: Setup default shell (zsh)
-  shell: chsh -s /usr/bin/zsh
+- name: Setup zsh
+  user:
+    name: "{{ ansible_user }}"
+    shell: /usr/bin/zsh
 
 - name: Clone Powerlevel10k theme
   git:
