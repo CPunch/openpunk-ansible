@@ -9,21 +9,22 @@
 # make sure our vps trusts the github.com key signature. we pipe the output
 # of ssh-keyscan into .ssh/known_hosts
 
-# TODO: make idempotent
 - name: Scan for SSH host keys
   command: ssh-keyscan github.com 2>/dev/null
   register: ssh_scan
+  changed_when: false
 
-- name: Update known_hosts
-  copy:
-    content: "{{ ssh_scan.stdout_lines|join('\n')  }}"
-    dest: /root/.ssh/known_hosts
+- name: Update .ssh/known_hosts
+  blockinfile:
+    path: /root/.ssh/known_hosts
+    block: "{{ ssh_scan.stdout_lines|join('\n') }}"
+    insertbefore: BOF
+    create: yes
     owner: root
     mode: u=rw,g=,o=
-    force: no # if we already have a known_hosts file, ignore!
 
 # this keypair is trusted under my github account, so it allows my vps to make pushes
-# to the main branch of my openpunk repository. (for my deadswitch: see static/blog/imdead.sh)
+# to the main branch of my openpunk repository. (see roles/deadswitchfiles/imdead.sh)
 
 - name: Install ssh priv key
   copy:
