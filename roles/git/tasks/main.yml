@@ -24,7 +24,7 @@
     mode: u=rw,g=,o=
 
 # this keypair is trusted under my github account, so it allows my vps to make pushes
-# to the main branch of my openpunk repository. (see roles/deadswitchfiles/imdead.sh)
+# to the main branch of my openpunk repository. (see roles/deadswitch/files/imdead.sh)
 
 - name: Install ssh priv key
   copy:

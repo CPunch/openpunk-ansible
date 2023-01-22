@@ -1,40 +1,63 @@
 ---
-- name: Check if Gitea is installed
-  shell: gitea --version
-  register: validate_gitea
-  changed_when: no
+- name: Check for Gitea gpg key
+  stat:
+    path: /etc/apt/trusted.gpg.d/morph027-gitea.gpg
+  register: gitea_key
 
-- name: Add Gitea key && repository
+- name: Install Gitea
   block:
-    - name: Check for Gitea gpg key
-      stat:
-        path: /etc/apt/trusted.gpg.d/morph027-gitea.gpg
-      register: gitea_key
+    - name: Add Gitea key, repository && install
+      block:
+        - name: Import Gitea key
+          shell: curl -s https://packaging.gitlab.io/gitea/gpg.key | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/morph027-gitea.gpg --import && sudo chmod 644 /etc/apt/trusted.gpg.d/morph027-gitea.gpg
+          when: gitea_key.stat.exists == false or gitea_key.stat.mode != "0644"
 
-    - name: Import Gitea key
-      shell: curl -s https://packaging.gitlab.io/gitea/gpg.key | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/morph027-gitea.gpg --import && sudo chmod 644 /etc/apt/trusted.gpg.d/morph027-gitea.gpg
-      when: gitea_key.stat.exists == false or gitea_key.stat.mode != "0644"
+        - name: Add Gitea repository
+          apt_repository:
+            filename: morph027-gitea
+            repo: deb https://packaging.gitlab.io/gitea gitea main
 
-    - name: Add Gitea repository
+        - name: Add Gitea package
+          package:
+            name: gitea
+      when: "'gitea' not in ansible_facts.packages"
+
+    - name: Configure Gitea
+      template:
+        src: templates/app.ini
+        dest: /etc/gitea/app.ini
+        owner: gitea
+        force: no # we don't want to kill our existing config D:
+
+    - name: Reload Gitea
+      systemd:
+        name: gitea
+        enabled: yes
+        state: started
+  when: giteaUninstall == false
+
+- name: Uninstall Gitea
+  block:
+    - name: Stop Gitea
+      systemd:
+        name: gitea
+        enabled: no
+        state: stopped
+
+    - name: Remove Gitea package
+      package:
+        name: gitea
+        state: absent
+
+    - name: Remove Gitea repository
       apt_repository:
         filename: morph027-gitea
         repo: deb https://packaging.gitlab.io/gitea gitea main
-  when: '"not found" in validate_gitea.stdout'
+        state: absent
 
-- name: Install Gitea
-  package:
-    name:
-      - gitea
-
-- name: Configure Gitea
-  template:
-    src: templates/app.ini
-    dest: /etc/gitea/app.ini
-    owner: gitea
-    force: no # we don't want to kill our existing config D:
-
-- name: Reload Gitea
-  systemd:
-    name: gitea
-    enabled: yes
-    state: started
+    - name: Remove Gitea key
+      file:
+        path: /etc/apt/trusted.gpg.d/morph027-gitea.gpg
+        state: absent
+      when: gitea_key.stat.exists == false or gitea_key.stat.mode != "0644"
+  when: giteaUninstall == true and ('gitea' in ansible_facts.packages)

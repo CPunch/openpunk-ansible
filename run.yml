@@ -1,6 +1,10 @@
 ---
 - hosts: all
   become: yes
+  vars:
+    - giteaPort: 3000
+    - giteaUninstall: false
+
   vars_files:
     - group_vars/all.yml
 
@@ -10,12 +14,12 @@
       private: no
 
   roles:
-    - essential
-    - git
-    - deadswitch
-    - firewall
-    - blog
-    - gitea
-    - nginx
-    - goaccess
-    - tor
+    - role: essential
+    - role: firewall
+    - role: git
+    - role: deadswitch
+    - role: blog
+    - role: gitea
+    - role: nginx
+    - role: goaccess
+    - role: tor

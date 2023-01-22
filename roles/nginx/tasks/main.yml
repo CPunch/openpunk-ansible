@@ -22,6 +22,14 @@
     dest: /etc/nginx/conf.d/git.{{ domain }}.conf
     force: no
   notify: setup nginx
+  when: giteaPort is defined and giteaUninstall == false
+
+- name: Uninstall nginx config for git.{{ domain }}
+  file:
+    path: /etc/nginx/conf.d/git.{{ domain }}.conf
+    state: absent
+  notify: setup nginx
+  when: giteaPort is not defined or (giteaUninstall is defined and giteaUninstall)
 
 - name: Install nginx config for our Hidden Service
   template:
