@@ -22,4 +22,5 @@
 - name: Fetch backup
   fetch:
     src: /etc/gitea/gitea-dump.zip
-    dest: backups
+    dest: backups/gitea-dump.zip
+    flat: true

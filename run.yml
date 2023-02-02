@@ -3,7 +3,6 @@
   become: yes
   vars:
     - giteaPort: 3000
-    - giteaUninstall: false
 
   vars_files:
     - group_vars/all.yml

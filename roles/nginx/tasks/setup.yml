@@ -4,7 +4,6 @@
 
 - name: Setup certbot for git.{{ domain }}
   shell: "certbot --nginx --non-interactive --agree-tos -m {{ contact_email }} -d git.{{ domain }}"
-  when: giteaPort is defined and giteaUninstall == false
 
 - name: Reload Nginx
   systemd:

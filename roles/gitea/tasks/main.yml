@@ -42,30 +42,4 @@
     - name: Backup db
       include_tasks: backup.yml
       tags: ['never', 'backup']
-  when: giteaUninstall == false
-
-- name: Uninstall Gitea
-  block:
-    - name: Stop Gitea
-      systemd:
-        name: gitea
-        enabled: no
-        state: stopped
-
-    - name: Remove Gitea package
-      package:
-        name: gitea
-        state: absent
-
-    - name: Remove Gitea repository
-      apt_repository:
-        filename: morph027-gitea
-        repo: deb https://packaging.gitlab.io/gitea gitea main
-        state: absent
-
-    - name: Remove Gitea key
-      file:
-        path: /etc/apt/trusted.gpg.d/morph027-gitea.gpg
-        state: absent
-      when: gitea_key.stat.exists == false or gitea_key.stat.mode != "0644"
-  when: giteaUninstall == true and ('gitea' in ansible_facts.packages)
+  tags: ['gitea', 'backup']
