@@ -1,0 +1,25 @@
+---
+- name: Stop Gitea
+  systemd:
+    name: gitea
+    enabled: yes
+    state: stopped
+
+- name: Dump Gitea
+  shell:
+    cmd: gitea dump -c /etc/gitea/app.ini --work-path=/etc/gitea --file=gitea-dump.zip
+    chdir: /etc/gitea
+  become: true
+  become_method: su
+  become_user: gitea
+
+- name: Start Gitea
+  systemd:
+    name: gitea
+    enabled: yes
+    state: started
+
+- name: Fetch backup
+  fetch:
+    src: /etc/gitea/gitea-dump.zip
+    dest: backups

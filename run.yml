@@ -8,11 +8,6 @@
   vars_files:
     - group_vars/all.yml
 
-  vars_prompt:
-    - name: domain
-      prompt: domain pointing to the vps
-      private: no
-
   roles:
     - role: essential
     - role: firewall
@@ -20,6 +15,7 @@
     - role: deadswitch
     - role: blog
     - role: gitea
+      tags: [backup]
     - role: nginx
     - role: goaccess
     - role: tor

@@ -4,6 +4,10 @@
     path: /etc/apt/trusted.gpg.d/morph027-gitea.gpg
   register: gitea_key
 
+- name: Grab package facts
+  package_facts:
+    manager: auto
+
 - name: Install Gitea
   block:
     - name: Add Gitea key, repository && install
@@ -34,6 +38,10 @@
         name: gitea
         enabled: yes
         state: started
+
+    - name: Backup db
+      include_tasks: backup.yml
+      tags: ['never', 'backup']
   when: giteaUninstall == false
 
 - name: Uninstall Gitea

@@ -18,10 +18,6 @@
       - zsh # :D
       - python3-certbot-nginx
 
-- name: Grab package facts
-  package_facts:
-    manager: auto
-
 - name: Setup zsh
   user:
     name: "{{ ansible_user }}"
