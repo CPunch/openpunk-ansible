@@ -22,5 +22,5 @@ echo $dTime
 if [ $dTime -gt $triggerTime ]
 then 
     touch $fileLock
-    bash $scriptToRun
+    source $scriptToRun
 fi

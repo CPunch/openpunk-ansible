@@ -19,7 +19,7 @@ if [ $LOCAL = $REMOTE ]; then
     # to check for changes (changed_when)
     echo "up to date"
 elif [ $LOCAL = $BASE ]; then
-    # there are changes to reset too so we need to rebuild
+    # there are changes to reset to so we need to rebuild
     echo "missing changes !!"
     git reset --hard origin/main
     buildBlog
