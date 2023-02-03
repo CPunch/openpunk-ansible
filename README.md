@@ -3,7 +3,7 @@
 This is my failsafe (and also my helpful migration tool) for restoring the OpenPunk server. This handles setting everything back up, including:
 
 - gitea
-    - sadly, no db migration is supported right now. maybe a future todo?
+    - backup and restoring are also supported
 - blog
     - cron job for grabbing the `HEAD` of https://github.com/CPunch/openpunk && building the hugo site
 - tor mirror
@@ -29,6 +29,18 @@ Some DNS records also need to be set:
 ansible-playbook -i hosts --ask-vault-pass run.yml
 ```
 > NOTE: The 'secrets' directory has been omitted from this repo (so it's not going to run without the provided files)
+
+## Backup and restore
+
+Backup Gitea using the 'backup' tag
+```sh
+ansible-playbook -i hosts run.yml --tags backup
+```
+
+then, restore from the backup using the 'restore' tag
+```sh
+ansible-playbook -i hosts run.yml --tags restore
+```
 
 ## Example hosts file
 ```
