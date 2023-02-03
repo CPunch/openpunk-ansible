@@ -1,26 +1,51 @@
 ---
+# based on advice from https://docs.gitea.io/en-us/backup-and-restore/
+
 - name: Stop Gitea
   systemd:
     name: gitea
     enabled: yes
     state: stopped
+  tags: backup
+
+- name: Make Temp dir
+  file:
+    path: /etc/gitea/temp
+    state: directory
+    owner: gitea
+  tags: backup
 
 - name: Dump Gitea
   shell:
-    cmd: gitea dump -c /etc/gitea/app.ini --work-path=/etc/gitea --file=gitea-dump.zip
+    cmd: gitea dump -c /etc/gitea/app.ini --work-path=/etc/gitea --file=gitea-dump.zip --tempdir=/etc/gitea/temp
     chdir: /etc/gitea
   become: true
   become_method: su
   become_user: gitea
+  tags: backup
+
+- name: Fetch backup
+  fetch:
+    src: /etc/gitea/gitea-dump.zip
+    dest: "{{ giteaBackup }}"
+    flat: true
+  tags: backup
+
+- name: Remove remote dump
+  file:
+    path: "{{ giteaBackup }}"
+    state: absent
+  tags: backup
+
+- name: Remove Temp
+  file:
+    path: /etc/gitea/temp
+    state: absent
+  tags: backup
 
 - name: Start Gitea
   systemd:
     name: gitea
     enabled: yes
     state: started
-
-- name: Fetch backup
-  fetch:
-    src: /etc/gitea/gitea-dump.zip
-    dest: backups/gitea-dump.zip
-    flat: true
+  tags: backup

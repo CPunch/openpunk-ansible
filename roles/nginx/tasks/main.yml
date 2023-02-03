@@ -23,12 +23,6 @@
     force: no
   notify: setup nginx
 
-- name: Uninstall nginx config for git.{{ domain }}
-  file:
-    path: /etc/nginx/conf.d/git.{{ domain }}.conf
-    state: absent
-  notify: setup nginx
-
 - name: Install nginx config for our Hidden Service
   template:
     src: templates/tor.conf

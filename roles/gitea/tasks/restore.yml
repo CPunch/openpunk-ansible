@@ -1,0 +1,92 @@
+---
+# based on advice from https://docs.gitea.io/en-us/backup-and-restore/
+
+- name: Stop Gitea
+  systemd:
+    name: gitea
+    enabled: yes
+    state: stopped
+  tags: restore
+
+- name: Make restore dir
+  file:
+    path: /etc/gitea/gitea-dump
+    state: directory
+    owner: gitea
+  tags: restore
+
+- name: Extract backup to host
+  unarchive:
+    src: "{{ giteaBackup }}"
+    dest: /etc/gitea/gitea-dump
+    owner: gitea
+  tags: restore
+
+- name: Delete Gitea
+  file:
+    path: /var/lib/gitea
+    state: absent
+  tags: restore
+
+- name: Create Gitea
+  file:
+    path: /var/lib/gitea
+    state: directory
+    owner: gitea
+  tags: restore
+
+- name: Install data
+  copy:
+    src: /etc/gitea/gitea-dump/data/
+    dest: /var/lib/gitea/data
+    remote_src: true
+    owner: gitea
+  tags: restore
+
+- name: Install log
+  copy:
+    src: /etc/gitea/gitea-dump/log/
+    dest: /var/lib/gitea/log/
+    remote_src: true
+    owner: gitea
+  tags: restore
+  ignore_errors: true
+
+- name: Install repositories
+  copy:
+    src: /etc/gitea/gitea-dump/repos/
+    dest: /var/lib/gitea/gitea-repositories/
+    remote_src: true
+    owner: gitea
+  tags: restore
+
+- name: Install config
+  copy:
+    src: /etc/gitea/gitea-dump/app.ini
+    dest: /etc/gitea/app.ini
+    owner: gitea
+    remote_src: true
+  tags: restore
+
+- name: Generate sqlite3 db
+  shell: sqlite3 /var/lib/gitea/data/gitea.db </etc/gitea/gitea-dump/gitea-db.sql
+  become: true
+  become_method: su
+  become_user: gitea
+  tags: restore
+
+- name: Start Gitea
+  systemd:
+    name: gitea
+    enabled: yes
+    state: started
+  tags: restore
+
+- name: Finalize
+  shell:
+    cmd: ./gitea admin regenerate hooks -c /etc/gitea/app.ini
+    chdir: /usr/bin
+  become: true
+  become_method: su
+  become_user: gitea
+  tags: restore

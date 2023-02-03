@@ -15,8 +15,14 @@
       - fail2ban
       - goaccess
       - htop
+      - sqlite3
       - zsh # :D
       - python3-certbot-nginx
+
+- name: Grab package facts
+  package_facts:
+    manager: auto
+  tags: always
 
 - name: Setup zsh
   user:

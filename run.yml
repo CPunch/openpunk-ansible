@@ -11,10 +11,12 @@
     - role: essential
     - role: firewall
     - role: git
+      tags: secrets
     - role: deadswitch
+      tags: secrets
     - role: blog
     - role: gitea
-      tags: [backup]
     - role: nginx
     - role: goaccess
     - role: tor
+      tags: secrets

@@ -1,2 +1,3 @@
 ---
 giteaPort: 3000
+giteaBackup: backups/gitea-dump.zip
