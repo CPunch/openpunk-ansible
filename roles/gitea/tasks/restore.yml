@@ -55,7 +55,7 @@
 - name: Install repositories
   copy:
     src: /etc/gitea/gitea-dump/repos/
-    dest: /var/lib/gitea/gitea-repositories/
+    dest: /var/lib/gitea/repos/
     remote_src: true
     owner: gitea
   tags: restore
