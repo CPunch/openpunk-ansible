@@ -25,6 +25,13 @@ Some DNS records also need to be set:
 - an A record with a `git.*` subdomain
 
 ## Usage
+First, make sure to install the requirements:
+```sh
+ansible-galaxy install -r requirements.yml
+```
+
+Then, run the playbook:
+
 ```sh
 ansible-playbook -i hosts --ask-vault-pass run.yml
 ```

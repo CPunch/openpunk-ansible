@@ -6,7 +6,7 @@ TOR_DIR=tor
 
 buildBlog () {
     hugo --cleanDestinationDir --minify -d $PUBLIC_DIR -b https://{{ domain }}
-    hugo --cleanDestinationDir --minify -d $TOR_DIR -b {{ onionDomain }}
+    hugo --cleanDestinationDir --minify -d $TOR_DIR -b http://{{ onionDomain }}
 }
 
 git fetch origin
