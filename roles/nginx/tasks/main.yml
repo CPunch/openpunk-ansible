@@ -1,35 +1,63 @@
 ---
-- name: Install system nginx config
-  copy:
-    src: nginx.conf
-    dest: /etc/nginx/nginx.conf
-  notify: setup nginx
-
-# setup our configs for each host (we don't want to 
-# overwrite certbot's changes, so if it already exists,
-# don't copy!)
-
-- name: Install nginx config for {{ domain }}
-  template:
-    src: templates/site.conf
-    dest: /etc/nginx/conf.d/{{ domain }}.conf
-    force: no
-  notify: setup nginx
-
-- name: Install nginx config for git.{{ domain }}
-  template:
-    src: templates/gitea.conf
-    dest: /etc/nginx/conf.d/git.{{ domain }}.conf
-    force: no
-  notify: setup nginx
-
-- name: Install nginx config for our Hidden Service
-  template:
-    src: templates/tor.conf
-    dest: /etc/nginx/conf.d/tor-{{ domain }}.conf
-
-- name: Enable Nginx
+- name: "Stop Nginx"
   systemd:
     name: nginx
-    enabled: yes
+    state: stopped
+
+- name: "Setup Certbot"
+  include_role:
+    name: geerlingguy.certbot
+  vars:
+    certbot_admin_email: "{{ contact_email }}"
+    certbot_create_if_missing: true
+    certbot_create_standalone_stop_services: []
+    certbot_certs:
+      - domains:
+          - "{{ domain }}"
+          - "git.{{ domain }}"
+
+- name: "Install Nginx"
+  include_role:
+    name: geerlingguy.nginx
+  vars:
+    nginx_listen_ipv6: true
+    nginx_vhosts:
+      - listen: "443 ssl http2"
+        server_name: "{{ domain }}"
+        root: "/var/www/{{ domain }}/public"
+        index: "index.html index.htm"
+        extra_parameters: |
+          location / {
+            add_header Permissions-Policy interest-cohort=();
+            try_files $uri $uri/ =404;
+          }
+          ssl_certificate     /etc/letsencrypt/live/{{ domain }}/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/{{ domain }}/privkey.pem;
+          ssl_protocols       TLSv1.1 TLSv1.2 TLSv1.3;
+          ssl_ciphers         HIGH:!aNULL:!MD5;
+      - listen: "443 ssl http2"
+        server_name: "git.{{ domain }}"
+        client_max_body_size: "100M"
+        extra_parameters: |
+          location / {
+            add_header Permissions-Policy interest-cohort=();
+            proxy_pass http://localhost:{{ giteaPort }};
+          }
+          ssl_certificate     /etc/letsencrypt/live/{{ domain }}/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/{{ domain }}/privkey.pem;
+          ssl_protocols       TLSv1.1 TLSv1.2 TLSv1.3;
+          ssl_ciphers         HIGH:!aNULL:!MD5;
+      - listen: "2171"
+        server_name: "{{ onionDomain }}"
+        root: "/var/www/{{ domain }}/tor"
+        index: "index.html index.htm"
+        extra_parameters: |
+          location / {
+            add_header Permissions-Policy interest-cohort=();
+            try_files $uri $uri/ =404;
+          }
+
+- name: "Start Nginx"
+  systemd:
+    name: nginx
     state: started

@@ -1,9 +1,0 @@
----
-- name: Setup certbot
-  shell: "certbot --nginx --non-interactive --agree-tos --email {{ contact_email }} -d {{ domain }} -d git.{{ domain }}"
-
-- name: Reload Nginx
-  systemd:
-    name: nginx
-    enabled: yes
-    state: restarted

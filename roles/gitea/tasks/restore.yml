@@ -60,12 +60,18 @@
     owner: gitea
   tags: restore
 
-- name: Install config
-  copy:
-    src: /etc/gitea/gitea-dump/app.ini
-    dest: /etc/gitea/app.ini
-    owner: gitea
-    remote_src: true
+# - name: Install config
+#   copy:
+#     src: /etc/gitea/gitea-dump/app.ini
+#     dest: /etc/gitea/app.ini
+#     owner: gitea
+#     remote_src: true
+#   tags: restore
+
+- name: Remove sqlite3 db
+  file:
+    path: /var/lib/gitea/data/gitea.db
+    state: absent
   tags: restore
 
 - name: Generate sqlite3 db
@@ -83,9 +89,7 @@
   tags: restore
 
 - name: Finalize
-  shell:
-    cmd: ./gitea admin regenerate hooks -c /etc/gitea/app.ini
-    chdir: /usr/bin
+  shell: gitea admin regenerate hooks -c /etc/gitea/gitea.ini
   become: true
   become_method: su
   become_user: gitea

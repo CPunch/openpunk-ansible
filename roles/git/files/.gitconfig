@@ -1,7 +1,7 @@
 [user]
-        email = openpunk@proton.me
-        name = OpenPunk
+email = openpunk@proton.me
+name = OpenPunk
 [core]
-        editor = nano
+editor = nano
 [pull]
-        rebase = true
+rebase = true
