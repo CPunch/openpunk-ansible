@@ -1,9 +1,6 @@
 ---
 - hosts: all
   become: yes
-  vars:
-    - giteaPort: 3000
-
   vars_files:
     - group_vars/all.yml
 
