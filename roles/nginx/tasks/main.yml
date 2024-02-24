@@ -20,13 +20,14 @@
   include_role:
     name: geerlingguy.nginx
   vars:
-    nginx_listen_ipv6: true
+    nginx_listen_ipv6: false
     nginx_vhosts:
       - listen: "443 ssl http2"
         server_name: "{{ domain }}"
         root: "/var/www/{{ domain }}/public"
         index: "index.html index.htm"
         extra_parameters: |
+          listen [::]:443 ssl http2;
           location / {
             add_header Permissions-Policy interest-cohort=();
             try_files $uri $uri/ =404;
@@ -39,6 +40,7 @@
         server_name: "git.{{ domain }}"
         client_max_body_size: "100M"
         extra_parameters: |
+          listen [::]:443 ssl http2;
           location / {
             add_header Permissions-Policy interest-cohort=();
             proxy_pass http://localhost:{{ giteaPort }};
@@ -47,7 +49,7 @@
           ssl_certificate_key /etc/letsencrypt/live/{{ domain }}/privkey.pem;
           ssl_protocols       TLSv1.1 TLSv1.2 TLSv1.3;
           ssl_ciphers         HIGH:!aNULL:!MD5;
-      - listen: "2171"
+      - listen: "127.0.0.1:2171"
         server_name: "{{ onionDomain }}"
         root: "/var/www/{{ domain }}/tor"
         index: "index.html index.htm"
