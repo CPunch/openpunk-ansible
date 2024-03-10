@@ -36,11 +36,17 @@
           ssl_certificate_key /etc/letsencrypt/live/{{ domain }}/privkey.pem;
           ssl_protocols       TLSv1.1 TLSv1.2 TLSv1.3;
           ssl_ciphers         HIGH:!aNULL:!MD5;
+      - listen: "80" # redirect http requests to https
+        server_name: "{{ domain }}"
+        return: "301 https://{{ domain }}$request_uri"
+        filename: "{{ domain }}.80.conf"
       - listen: "443 ssl http2"
         server_name: "git.{{ domain }}"
         client_max_body_size: "512M"
         extra_parameters: |
           listen [::]:443 ssl http2;
+          listen 80;
+          listen [::]:80;
           location / {
             add_header Permissions-Policy interest-cohort=();
             proxy_pass http://localhost:{{ giteaPort }};
@@ -55,6 +61,10 @@
           ssl_certificate_key /etc/letsencrypt/live/{{ domain }}/privkey.pem;
           ssl_protocols       TLSv1.1 TLSv1.2 TLSv1.3;
           ssl_ciphers         HIGH:!aNULL:!MD5;
+      - listen: "80" # redirect http requests to https
+        server_name: "git.{{ domain }}"
+        return: "301 https://git.{{ domain }}$request_uri"
+        filename: "git.{{ domain }}.80.conf"
       - listen: "127.0.0.1:2171"
         server_name: "{{ onionDomain }}"
         root: "/var/www/{{ domain }}/tor"
