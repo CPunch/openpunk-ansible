@@ -33,7 +33,7 @@
 
 - name: Remove remote dump
   file:
-    path: "{{ giteaBackup }}"
+    path: /etc/gitea/gitea-dump.zip
     state: absent
   tags: backup
 
