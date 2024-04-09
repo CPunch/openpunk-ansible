@@ -17,7 +17,7 @@
 
 - name: Dump Gitea
   shell:
-    cmd: gitea dump -c /etc/gitea/app.ini --work-path=/etc/gitea --file=gitea-dump.zip --tempdir=/etc/gitea/temp
+    cmd: gitea dump -c /etc/gitea/gitea.ini --work-path=/etc/gitea --file=gitea-dump.zip --tempdir=/etc/gitea/temp
     chdir: /etc/gitea
   become: true
   become_method: su
