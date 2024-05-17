@@ -15,6 +15,7 @@
     gitea_allow_only_internal_registration: true
     gitea_disable_registration: true
     gitea_require_signin: false
+    gitea_lfs_server_enabled: true
 
 - name: Backup db
   include_tasks: backup.yml
