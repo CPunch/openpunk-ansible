@@ -6,7 +6,7 @@
     gitea_fqdn: 'git.{{ domain }}'
     gitea_home: '/var/lib/gitea'
     gitea_db_type: 'sqlite3'
-    gitea_theme_default: 'arc-green'
+    gitea_theme_default: 'gitea-dark'
     gitea_root_url: 'https://git.{{ domain }}'
     gitea_protocol: http
     gitea_http_port: "{{ giteaPort }}"
