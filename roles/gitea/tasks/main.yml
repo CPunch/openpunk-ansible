@@ -17,6 +17,10 @@
     gitea_require_signin: false
     gitea_lfs_server_enabled: true
 
+- name: "Start Gitea Act Runner"
+  include_tasks: runner.yml
+  when: giteaRunnerToken is defined
+
 - name: Backup db
   include_tasks: backup.yml
   tags:

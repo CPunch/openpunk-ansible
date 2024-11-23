@@ -1,3 +1,4 @@
 ---
 giteaPort: 3000
-giteaBackup: backups/gitea-dump.zip
+giteaBackup: backups/gitea-dump.zip # local path
+runnerPath: "{{ ansible_env.HOME }}/runner"

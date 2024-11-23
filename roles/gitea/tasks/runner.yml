@@ -1,0 +1,27 @@
+- name: Make dirs for runner
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ runnerPath }}"
+    - "{{ runnerPath }}/data"
+
+- name: Copy docker-compose.yml to server
+  template:
+    src: ./templates/runner-docker-compose.yml
+    dest: "{{ runnerPath }}/docker-compose.yml"
+
+- name: Copy runner.env to server
+  template:
+    src: ./templates/runner.env
+    dest: "{{ runnerPath }}/runner.env"
+
+- name: Copy runner-config.yml to server
+  copy:
+    src: ./files/runner-config.yml
+    dest: "{{ runnerPath }}/config.yaml"
+
+- name: Start Gitea runner service
+  community.docker.docker_compose_v2:
+    project_src: "{{ runnerPath }}"
+    state: present

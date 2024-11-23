@@ -1,0 +1,21 @@
+services:
+  runner:
+    image: gitea/act_runner:latest
+    environment:
+      CONFIG_FILE: /config.yaml
+      GITEA_INSTANCE_URL: "https://git.{{ domain }}"
+    env_file:
+      - ./runner.env
+    volumes:
+      - ./config.yaml:/config.yaml
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 18088:18088
+    networks:
+      - runner-cache
+
+networks:
+  runner-cache:
+    name: runner-cache
+    driver: bridge

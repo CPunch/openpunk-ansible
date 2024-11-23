@@ -24,6 +24,8 @@ ssh openpunk 'touch /root/.deadtrigger'
 Some DNS records also need to be set:
 - an A record with a `git.*` subdomain
 
+A Gitea Act Runner is also setup if the `giteaRunnerToken` variable is defined in your hosts file.
+
 ## Usage
 First, make sure to install the requirements:
 ```sh
@@ -52,5 +54,5 @@ ansible-playbook -i hosts run.yml --tags restore
 ## Example hosts file
 ```
 [hosts]
-openpunk-vps ansible_host=104.238.138.76 ansible_user=root ansible_connection=ssh
+openpunk-vps ansible_host=104.238.138.76 ansible_user=root ansible_connection=ssh giteaRunnerToken=my-token-yayy
 ```
